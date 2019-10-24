@@ -1,4 +1,4 @@
-package com.example.fighterwar;
+package com.example.fighterwar.Model;
 
 import android.content.Context;
 

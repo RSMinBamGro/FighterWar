@@ -1,10 +1,16 @@
-package com.example.fighterwar;
+package com.example.fighterwar.View;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.graphics.*;
+
+import com.example.fighterwar.Model.Background;
+import com.example.fighterwar.Model.Bullet;
+import com.example.fighterwar.Model.MyFighter;
+import com.example.fighterwar.Model.Objects;
+
+import java.io.ObjectStreamException;
 
 public class Frame extends View {
     private Paint painter = new Paint(); // 画笔
@@ -47,7 +53,6 @@ public class Frame extends View {
 
         new Thread(new Update()).start(); // 新建线程，令画布自动重绘
 
-        Log.d(getClass().toString() + "Frame", ((Integer)Objects.width).toString() + " " + ((Integer)Objects.height).toString());
     }
 
     private class Update implements Runnable {
@@ -71,8 +76,31 @@ public class Frame extends View {
 
         canvas.drawBitmap(Objects.background.getImg(), null, Objects.background.getRect(), painter);
 
-        for (FlyingObject fo : Objects.flyingObjects)
-                canvas.drawBitmap(fo.getImg(), null, fo.getRect(), painter);
+        try {
+            Objects.rmutex.acquire();
+
+            if(Objects.readCount == 0)
+                Objects.wmutex.acquire();
+
+            Objects.readCount ++;
+
+            Objects.rmutex.release();
+
+            for (int i = 0; i < Objects.flyingObjects.size(); i ++)
+                canvas.drawBitmap(Objects.flyingObjects.get(i).getImg(), null, Objects.flyingObjects.get(i).getRect(), painter);
+
+            Objects.rmutex.acquire();
+
+            Objects.readCount --;
+
+            Objects.rmutex.release();
+
+            if (Objects.readCount == 0)
+                Objects.wmutex.release();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
 
     }
 
@@ -85,10 +113,10 @@ public class Frame extends View {
         // 获取手机分辨率与 960 * 540 的比例
         Objects.screenScale = (float) (Math.sqrt(Objects.width * Objects.height) / Math.sqrt(960 * 540));
 
-        //
-        Objects.background = new Background(this.getContext());
-        Objects.myFighter = new MyFighter(this.getContext());
-
+        // 捕获屏幕大小之后才能创建背景对象
+        Objects.background = new Background(getContext());
+        Objects.myFighter = new MyFighter(getContext());
+        Bullet bullet = new Bullet(getContext());
     }
 
 }

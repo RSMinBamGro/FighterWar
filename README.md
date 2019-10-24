@@ -137,4 +137,17 @@ void printSamples(MotionEvent ev) {
 
 ### Exceptions
 #### java.lang.NullPointerException: Attempt to invoke virtual method 'boolean android.graphics.Bitmap.isRecycled()' on a null object reference
-加载的图片文件不能是 .bmp ， .png 可以。
+加载的图片文件是 `.bmp` 会导致导入异常，使 Bitmap 对象 `img` 为空， `.png` 文件可以。
+
+####  java.util.ConcurrentModificationException
+https://www.cnblogs.com/dolphin0520/p/3933551.html
+
+#### java.lang.ArrayIndexOutOfBoundsException
+可能存在以下情况： Frame 的方法 onDraw() 中对指定 index 处的对象进行绘制时，该对象的线程中已经判定该对象出界或发生碰撞而将该对象从对象列表中移除，此时会发生越界异常。
+
+当多个并发线程对 Objects 类中的静态共享资源同时进行访问和修改时可能造成该异常（**读者-写者问题**）。
+
+可以通过信号量 `Semaphore` 解决：
+```markdown
+
+```

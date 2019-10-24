@@ -1,4 +1,4 @@
-package com.example.fighterwar;
+package com.example.fighterwar.Model;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -14,12 +14,17 @@ public class FlyingObject extends View{
     protected Rect rect = new Rect(); // 用来确定位置
     protected int hp; // 生命
     protected int width, height; // 宽高
+    protected int speed; // 速度
     protected Bitmap img;
 
     public FlyingObject (Context context) {
         super(context);
     }
 
+    @Override
+    public void onDraw (Canvas canvas) {
+        super.onDraw(canvas);
+    }
 
     public void setX (int x) {
         rect.left = x;

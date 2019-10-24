@@ -1,9 +1,9 @@
-package com.example.fighterwar;
+package com.example.fighterwar.Model;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Rect;
+
+import com.example.fighterwar.R;
 
 public class Background extends FlyingObject /*implements Runnable*/ {
 
