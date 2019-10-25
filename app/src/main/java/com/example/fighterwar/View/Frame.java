@@ -5,12 +5,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.graphics.*;
 
+import com.example.fighterwar.Controller.Controller;
 import com.example.fighterwar.Model.Background;
 import com.example.fighterwar.Model.Bullet;
 import com.example.fighterwar.Model.MyFighter;
-import com.example.fighterwar.Model.Objects;
-
-import java.io.ObjectStreamException;
 
 public class Frame extends View {
     private Paint painter = new Paint(); // 画笔
@@ -20,7 +18,7 @@ public class Frame extends View {
     public Frame (Context context) {
         super(context);
 
-        painter.setTextSize(50 * Objects.screenScale);
+        painter.setTextSize(50 * Controller.screenScale);
         painter.setColor(Color.WHITE);
 
         position_down = new Point();
@@ -35,15 +33,15 @@ public class Frame extends View {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     position_down.set((int)event.getX(), (int)event.getY());
 
-                    position_myFighter.x = Objects.myFighter.getRect().left;
-                    position_myFighter.y = Objects.myFighter.getRect().top;
+                    position_myFighter.x = Controller.myFighter.getRect().left;
+                    position_myFighter.y = Controller.myFighter.getRect().top;
                 }
 
                 int delta_x = (int) event.getX() - position_down.x;
                 int delta_y = (int) event.getY() - position_down.y;
 
-                Objects.myFighter.setX(position_myFighter.x + delta_x);
-                Objects.myFighter.setY(position_myFighter.y + delta_y);
+                Controller.myFighter.setX(position_myFighter.x + delta_x);
+                Controller.myFighter.setY(position_myFighter.y + delta_y);
 
                 return true;
             }
@@ -74,29 +72,30 @@ public class Frame extends View {
     protected void onDraw (Canvas canvas) {
         super.onDraw(canvas);
 
-        canvas.drawBitmap(Objects.background.getImg(), null, Objects.background.getRect(), painter);
+        canvas.drawBitmap(Controller.background1.getImg(), null, Controller.background1.getRect(), painter);
 
         try {
-            Objects.rmutex.acquire();
+            if(Controller.readCount == 0)
+                Controller.wmutex.acquire();
 
-            if(Objects.readCount == 0)
-                Objects.wmutex.acquire();
 
-            Objects.readCount ++;
+            Controller.rmutex.acquire();
 
-            Objects.rmutex.release();
+            Controller.readCount ++;
 
-            for (int i = 0; i < Objects.flyingObjects.size(); i ++)
-                canvas.drawBitmap(Objects.flyingObjects.get(i).getImg(), null, Objects.flyingObjects.get(i).getRect(), painter);
+            Controller.rmutex.release();
 
-            Objects.rmutex.acquire();
+            for (int i = 0; i < Controller.flyingObjects.size(); i ++)
+                canvas.drawBitmap(Controller.flyingObjects.get(i).getImg(), null, Controller.flyingObjects.get(i).getRect(), painter);
 
-            Objects.readCount --;
+            Controller.rmutex.acquire();
 
-            Objects.rmutex.release();
+            Controller.readCount --;
 
-            if (Objects.readCount == 0)
-                Objects.wmutex.release();
+            Controller.rmutex.release();
+
+            if (Controller.readCount == 0)
+                Controller.wmutex.release();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -107,15 +106,15 @@ public class Frame extends View {
     @Override
     protected void onSizeChanged (int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        Objects.width = w;
-        Objects.height = h;
+        Controller.width = w;
+        Controller.height = h;
 
         // 获取手机分辨率与 960 * 540 的比例
-        Objects.screenScale = (float) (Math.sqrt(Objects.width * Objects.height) / Math.sqrt(960 * 540));
+        Controller.screenScale = (float) (Math.sqrt(Controller.width * Controller.height) / Math.sqrt(960 * 540));
 
         // 捕获屏幕大小之后才能创建背景对象
-        Objects.background = new Background(getContext());
-        Objects.myFighter = new MyFighter(getContext());
+        Controller.background1 = new Background(getContext());
+        Controller.myFighter = new MyFighter(getContext());
         Bullet bullet = new Bullet(getContext());
     }
 

@@ -3,6 +3,7 @@ package com.example.fighterwar.Model;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 
+import com.example.fighterwar.Controller.Controller;
 import com.example.fighterwar.R;
 
 public class MyFighter extends FlyingObject implements Runnable {
@@ -13,12 +14,12 @@ public class MyFighter extends FlyingObject implements Runnable {
         width = 75;
         height = 90;
 
-        setX(Objects.width / 2 - width / 2);
-        setY(Objects.height - height);
+        setX(Controller.width / 2 - width / 2);
+        setY(Controller.height - height);
 
         img = BitmapFactory.decodeResource(getResources(), R.mipmap.me);
 
-        Objects.flyingObjects.add(this);
+        Controller.flyingObjects.add(this);
 
         new Thread(this).start();
     }

@@ -3,6 +3,7 @@ package com.example.fighterwar.Model;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 
+import com.example.fighterwar.Controller.Controller;
 import com.example.fighterwar.R;
 
 public class Background extends FlyingObject /*implements Runnable*/ {
@@ -10,8 +11,8 @@ public class Background extends FlyingObject /*implements Runnable*/ {
     public Background (Context context) {
         super(context);
 
-        width = Objects.width;
-        height = Objects.height;
+        width = Controller.width;
+        height = Controller.height;
 
         setX(0);
         setY(0);
@@ -33,7 +34,7 @@ public class Background extends FlyingObject /*implements Runnable*/ {
 //            if (rect.top + 2 <= 0)
 //                setY(rect.top + 2);
 //            else
-//                setY(-Objects.height);
+//                setY(-Controller.height);
 //        }
 //    }
 }

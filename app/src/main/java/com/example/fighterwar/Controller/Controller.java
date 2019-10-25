@@ -1,4 +1,4 @@
-package com.example.fighterwar.Model;
+package com.example.fighterwar.Controller;
 
 import com.example.fighterwar.Model.Background;
 import com.example.fighterwar.Model.Bullet;
@@ -9,7 +9,7 @@ import com.example.fighterwar.Model.MyFighter;
 import java.util.Vector;
 import java.util.concurrent.Semaphore;
 
-public class Objects {
+public class Controller {
     public static int width, height; // 屏幕的宽高
     public static float screenScale; // 比例，用于适应不同屏幕
 
@@ -21,6 +21,6 @@ public class Objects {
     public static Vector<Enemy> enemies = new Vector<>(); // 敌人飞机的集合，添加进这个集合才能被子弹打中
 
     public static MyFighter myFighter;
-    public static Background background;
+    public static Background background1, background2;
 
 }

@@ -3,6 +3,7 @@ package com.example.fighterwar.Model;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 
+import com.example.fighterwar.Controller.Controller;
 import com.example.fighterwar.R;
 
 public class Bullet extends FlyingObject implements Runnable {
@@ -13,12 +14,12 @@ public class Bullet extends FlyingObject implements Runnable {
         width = 15;
         height = 30;
 
-        setX(Objects.myFighter.getRect().left + Objects.myFighter.getObjWidth() / 2 - width / 2);
-        setY(Objects.myFighter.getRect().top);
+        setX(Controller.myFighter.getRect().left + Controller.myFighter.getObjWidth() / 2 - width / 2);
+        setY(Controller.myFighter.getRect().top);
 
         img = BitmapFactory.decodeResource(getResources(), R.mipmap.bomb);
 
-        Objects.flyingObjects.add(this);
+        Controller.flyingObjects.add(this);
 
         new Thread(this).start();
     }
@@ -38,13 +39,13 @@ public class Bullet extends FlyingObject implements Runnable {
         }
 
         try {
-            Objects.wmutex.acquire();
+            Controller.wmutex.acquire();
 
-            Objects.flyingObjects.remove(this); // 不能在while循环内执行，否则该线程会持续执行，资源得不到释放，程序会越来越卡
+            Controller.flyingObjects.remove(this); // 不能在while循环内执行，否则该线程会持续执行，资源得不到释放，程序会越来越卡
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
-            Objects.wmutex.release();
+            Controller.wmutex.release();
         }
 
 
