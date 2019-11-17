@@ -28,12 +28,12 @@ public class Bullet extends FlyingObject implements Runnable {
     public void run () {
         while (true) {
             try {
-                Thread.sleep(10);
+                Thread.sleep(6);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
-            setY(rect.top - 6);
+            setY(rect.top - 12);
 
             if (rect.top + height <= 0) break;
         }

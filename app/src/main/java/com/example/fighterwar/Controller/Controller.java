@@ -5,12 +5,13 @@ import com.example.fighterwar.Model.Bullet;
 import com.example.fighterwar.Model.Enemy;
 import com.example.fighterwar.Model.FlyingObject;
 import com.example.fighterwar.Model.MyFighter;
+import com.example.fighterwar.View.Frame;
 
 import java.util.Vector;
 import java.util.concurrent.Semaphore;
 
 public class Controller {
-    public static int width, height; // 屏幕的宽高
+
     public static float screenScale; // 比例，用于适应不同屏幕
 
     public static Vector<FlyingObject> flyingObjects = new Vector<>(); // 所有飞行物的集合,添加进这个集合才能被画出来
@@ -21,6 +22,5 @@ public class Controller {
     public static Vector<Enemy> enemies = new Vector<>(); // 敌人飞机的集合，添加进这个集合才能被子弹打中
 
     public static MyFighter myFighter;
-    public static Background background1, background2;
 
 }

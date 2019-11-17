@@ -1,22 +1,28 @@
 package com.example.fighterwar.View;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.graphics.*;
 
+import com.example.fighterwar.Controller.BackgroundController;
 import com.example.fighterwar.Controller.Controller;
 import com.example.fighterwar.Model.Background;
 import com.example.fighterwar.Model.Bullet;
 import com.example.fighterwar.Model.MyFighter;
 
 public class Frame extends View {
+    public int width, height; // 屏幕的宽高
+
     private Paint painter = new Paint(); // 画笔
     private Point position_down; // 点触坐标
     private Point position_myFighter; // 我的战机坐标
 
     public Frame (Context context) {
         super(context);
+        width = context.getResources().getDisplayMetrics().widthPixels;
+        height = context.getResources().getDisplayMetrics().heightPixels;
 
         painter.setTextSize(50 * Controller.screenScale);
         painter.setColor(Color.WHITE);
@@ -72,7 +78,8 @@ public class Frame extends View {
     protected void onDraw (Canvas canvas) {
         super.onDraw(canvas);
 
-        canvas.drawBitmap(Controller.background1.getImg(), null, Controller.background1.getRect(), painter);
+        canvas.drawBitmap(BackgroundController.background1.getImg(), null, BackgroundController.background1.getRect(), painter);
+        canvas.drawBitmap(BackgroundController.background2.getImg(), null, BackgroundController.background2.getRect(), painter);
 
         try {
             if(Controller.readCount == 0)
@@ -106,16 +113,16 @@ public class Frame extends View {
     @Override
     protected void onSizeChanged (int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        Controller.width = w;
-        Controller.height = h;
+        width = w;
+        height = h;
 
         // 获取手机分辨率与 960 * 540 的比例
-        Controller.screenScale = (float) (Math.sqrt(Controller.width * Controller.height) / Math.sqrt(960 * 540));
+        Controller.screenScale = (float) (Math.sqrt(width * height) / Math.sqrt(960 * 540));
 
         // 捕获屏幕大小之后才能创建背景对象
-        Controller.background1 = new Background(getContext());
-        Controller.myFighter = new MyFighter(getContext());
-        Bullet bullet = new Bullet(getContext());
+
+        Log.d("Frame", w + " " + h);
+        Log.d("Frame", width + " " + height);
     }
 
 }
